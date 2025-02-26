@@ -68,14 +68,25 @@ const update = (req, res) => {
 
 //delete
 const destroy = (req, res) => {
-    const post = postsData.find((elm) => elm.id == req.params.id)
-    if (!post) {
-        return res.status(404).json({
-            error: "Post not found",
-        });
-    }
-    postsData.splice(postsData.indexOf(post), 1);
-    res.sendStatus(204);
+    // const post = postsData.find((elm) => elm.id == req.params.id)
+    // if (!post) {
+    //     return res.status(404).json({
+    //         error: "Post not found",
+    //     });
+    // }
+    // postsData.splice(postsData.indexOf(post), 1);
+    // res.sendStatus(204);
+    const sql = `DELETE FROM posts WHERE id = ? `;
+    const id = req.params.id;
+
+    connection.query(sql, [id], (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                error:"Database query failed",
+            });
+        }
+        res.sendStatus(204);
+    })
 };
 
 module.exports = { index, show, store, update, destroy }
