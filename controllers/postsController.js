@@ -27,13 +27,23 @@ const index = (req, res) => {
 
 //show
 const show = (req, res)  => {
-    const post = postsData.find((elm) => elm.id == req.params.id);
-    if (!post) {
-        return res.status(404).json({
-            error: "Post not found",
+    // const post = postsData.find((elm) => elm.id == req.params.id);
+    // if (!post) {
+    //     return res.status(404).json({
+    //         error: "Post not found",
+    //     });
+    // }
+    // res.json(post);
+    const sql = `SELECT * FROM posts WHERE id = ${req.params.id}`;
+    connection.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).json({ 
+                error: 'Database query failed' 
+            });
+        }
+        res.json(results);
         });
-    }
-    res.json(post);
+
 }
 
 //create
